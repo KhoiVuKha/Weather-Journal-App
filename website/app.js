@@ -30,9 +30,9 @@ function performAction(e) {
   // Get weather data return promise
   getWeatherData(baseURL, zipCode, apiKey).then((data) => {
     if (data) {
-      // Process data  received here
+      // Process data received here
       const {
-        main: { temp },
+        main: {temp, feels_like, temp_min, temp_max},
         name: city,
         weather: [{ description }],
       } = data;
@@ -41,6 +41,9 @@ function performAction(e) {
         newDate,
         temp: convertKelvinToCelsius(temp),
         feelings,
+        feels_like: convertKelvinToCelsius(feels_like),
+        temp_min: convertKelvinToCelsius(temp_min),
+        temp_max: convertKelvinToCelsius(temp_max),
         description,
         city,
       };
@@ -74,7 +77,12 @@ const postData = async (url = "", data = {}) => {
     body: JSON.stringify({
       temp: data.temp,
       date: data.newDate,
-      user_response: data.feelings
+      user_response: data.feelings,
+      feels_like: data.feels_like,
+      temp_min: data.temp_min,
+      temp_max: data.temp_max,
+      description: data.description,
+      city: data.city,
     })
   });
 
@@ -102,8 +110,13 @@ const updateUI = async () => {
   try{
     const allData = await request.json();
     document.getElementById('date').innerHTML = allData.date;
-    document.getElementById('temp').innerHTML = allData.temp + '&degC';
-    document.getElementById('content').innerHTML = allData.user_response;
+    document.getElementById('temp').innerHTML = "temp: " + allData.temp + '&degC';
+    document.getElementById('content').innerHTML = "You are feeling " + allData.user_response;
+    document.getElementById('feels_like').innerHTML = "feels_like: " + allData.feels_like + '&degC';
+    document.getElementById('temp_min').innerHTML = "L: " + allData.temp_min + '&degC';
+    document.getElementById('temp_max').innerHTML = "H: " + allData.temp_max + '&degC';
+    document.getElementById('description').innerHTML = allData.description;
+    document.getElementById('city').innerHTML = allData.city;
   } catch(error) {
     console.log("error", error);
   }

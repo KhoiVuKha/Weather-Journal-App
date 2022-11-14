@@ -40,6 +40,11 @@ function addWeatherInfo(req, res) {
   projectData['temp'] = req.body.temp;
   projectData['date'] = req.body.date;
   projectData['user_response'] = req.body.user_response;
+  projectData['feels_like'] = req.body.feels_like;
+  projectData['temp_min'] = req.body.temp_min;
+  projectData['temp_max'] = req.body.temp_max;
+  projectData['description'] = req.body.description;
+  projectData['city'] = req.body.city;
   console.log(`[Server] addWeatherInfo`, projectData);
   res.send(projectData);
 };
