@@ -15,7 +15,7 @@ let apiKey = 'bb7daac7665c00c87d1c8d42bd26d101';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
+let newDate = d.toDateString();
 
 // Event listener to add function to existing HTML DOM element
 document.getElementById('generate').addEventListener('click', performAction);
@@ -31,6 +31,21 @@ function performAction(e) {
   getWeatherData(baseURL, zipCode, apiKey).then((data) => {
     if (data) {
       // Process data  received here
+      const {
+        main: { temp },
+        name: city,
+        weather: [{ description }],
+      } = data;
+
+      const info = {
+        newDate,
+        city,
+        temp: convertKelvinToCelsius(temp),
+        description,
+        feelings,
+      };
+
+      postData("/add", info);
     }
   });
 }
@@ -44,5 +59,38 @@ const getWeatherData = async (url, zip, key) => {
     return data;
   }  catch(error) {
     console.log("error", error);
+  }
+}
+
+/* Function to POST data */
+const postData = async (url = "", data = {}) => {
+  const response = await fetch(url, {
+    method: 'POST', 
+    credentials: 'same-origin', 
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      temp: data.temp,
+      date: data.newDate,
+      user_response: data.feelings
+    })
+  });
+
+  try {
+    const newData = await response.json();
+    console.log(`[Client] Data saved: `, newData);
+    return newData;
+  } catch (error) {
+      console.log(error);
+  }
+};
+
+// Function to convert °K to ℃
+function convertKelvinToCelsius(kelvin) {
+  if (kelvin < (0)) {
+      return 'below absolute zero (0 °K)';
+  } else {
+      return (kelvin - 273.15).toFixed(2);
   }
 }
