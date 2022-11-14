@@ -39,13 +39,14 @@ function performAction(e) {
 
       const info = {
         newDate,
-        city,
         temp: convertKelvinToCelsius(temp),
-        description,
         feelings,
+        description,
+        city,
       };
 
       postData("/add", info);
+      updateUI();
     }
   });
 }
@@ -86,7 +87,7 @@ const postData = async (url = "", data = {}) => {
   }
 };
 
-// Function to convert °K to ℃
+/* Function to convert °K to ℃ */
 function convertKelvinToCelsius(kelvin) {
   if (kelvin < (0)) {
       return 'below absolute zero (0 °K)';
@@ -94,3 +95,16 @@ function convertKelvinToCelsius(kelvin) {
       return (kelvin - 273.15).toFixed(2);
   }
 }
+
+/* Function to GET Project Data */
+const updateUI = async () => {
+  const request = await fetch('/all');
+  try{
+    const allData = await request.json();
+    document.getElementById('date').innerHTML = allData.date;
+    document.getElementById('temp').innerHTML = allData.temp + '&degC';
+    document.getElementById('content').innerHTML = allData.user_response;
+  } catch(error) {
+    console.log("error", error);
+  }
+};
