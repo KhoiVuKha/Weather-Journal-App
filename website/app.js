@@ -7,11 +7,11 @@
  */
 
 /* Global Variables */
+// Personal API Key for OpenWeatherMap API
+const apiKey = 'bb7daac7665c00c87d1c8d42bd26d101&units=metric';
+
 // Base URL
 let baseURL = 'https://api.openweathermap.org/data/2.5/weather?zip='
-
-// Personal API Key for OpenWeatherMap API
-let apiKey = 'bb7daac7665c00c87d1c8d42bd26d101';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
@@ -39,11 +39,11 @@ function performAction(e) {
 
       const info = {
         newDate,
-        temp: convertKelvinToCelsius(temp),
+        temp: Math.round(temp),
         feelings,
-        feels_like: convertKelvinToCelsius(feels_like),
-        temp_min: convertKelvinToCelsius(temp_min),
-        temp_max: convertKelvinToCelsius(temp_max),
+        feels_like: Math.round(feels_like),
+        temp_min: Math.round(temp_min),
+        temp_max: Math.round(temp_max),
         description,
         city,
       };
@@ -103,15 +103,6 @@ const postData = async (url = "", data = {}) => {
       console.log(error);
   }
 };
-
-/* Function to convert °K to ℃ */
-function convertKelvinToCelsius(kelvin) {
-  if (kelvin < (0)) {
-      return 'below absolute zero (0 °K)';
-  } else {
-      return Math.round((kelvin - 273.15));
-  }
-}
 
 /* Function to GET Project Data */
 const updateUI = async () => {
