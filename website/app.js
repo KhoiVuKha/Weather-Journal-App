@@ -109,7 +109,7 @@ function convertKelvinToCelsius(kelvin) {
   if (kelvin < (0)) {
       return 'below absolute zero (0 °K)';
   } else {
-      return (kelvin - 273.15).toFixed(2);
+      return Math.round((kelvin - 273.15));
   }
 }
 
@@ -121,9 +121,8 @@ const updateUI = async () => {
     document.getElementById('date').innerHTML = allData.date;
     document.getElementById('temp').innerHTML = allData.temp + '&degC';
     document.getElementById('content').innerHTML = "You are feeling " + allData.user_response;
+    document.getElementById('temp_min_max').innerHTML = "L: " + allData.temp_min + '&degC' + " H: " + allData.temp_max + '&degC';
     document.getElementById('feels_like').innerHTML = "Feels like: " + allData.feels_like + '&degC';
-    document.getElementById('temp_min').innerHTML = "L: " + allData.temp_min + '&degC';
-    document.getElementById('temp_max').innerHTML = "H: " + allData.temp_max + '&degC';
     document.getElementById('description').innerHTML = allData.description;
     document.getElementById('city').innerHTML = allData.city;
   } catch(error) {

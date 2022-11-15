@@ -44,7 +44,6 @@ body {
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
 #zip,
-#feelings,
 #generate {
     background: #17053866;
     margin: 60px auto 0px;
@@ -53,6 +52,21 @@ body {
     border: none;
     border-radius: 20px;
     height: 40px;
+    text-align: center;
+    color: white;
+    display: block;
+    font-size: 15px;
+    resize: none;
+}
+
+#feelings {
+    background: #17053866;
+    margin: 60px auto 0px;
+    width: 35%;
+    outline: none;
+    border: none;
+    border-radius: 20px;
+    height: 100px;
     text-align: center;
     color: white;
     display: block;
@@ -98,4 +112,5 @@ body {
     color: white;
     font-family: sans-serif;
     line-height: 40px;
+    text-align: center;
 }
