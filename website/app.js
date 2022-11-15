@@ -50,6 +50,7 @@ function performAction(e) {
 
       postData("/add", info);
       updateUI();
+      document.getElementById('entry').style.opacity = 1;
     }
   });
 }
@@ -60,6 +61,14 @@ const getWeatherData = async (url, zip, key) => {
   try {
     const data = await res.json();
     console.log(data)
+
+    if (data.cod != 200) {
+      // Display the error message on UI
+      error.innerHTML = data.message;
+      setTimeout(_=> error.innerHTML = '', 2000)
+      throw `${data.message}`;
+    }
+
     return data;
   }  catch(error) {
     console.log("error", error);
@@ -107,12 +116,12 @@ function convertKelvinToCelsius(kelvin) {
 /* Function to GET Project Data */
 const updateUI = async () => {
   const request = await fetch('/all');
-  try{
+  try {
     const allData = await request.json();
     document.getElementById('date').innerHTML = allData.date;
-    document.getElementById('temp').innerHTML = "temp: " + allData.temp + '&degC';
+    document.getElementById('temp').innerHTML = allData.temp + '&degC';
     document.getElementById('content').innerHTML = "You are feeling " + allData.user_response;
-    document.getElementById('feels_like').innerHTML = "feels_like: " + allData.feels_like + '&degC';
+    document.getElementById('feels_like').innerHTML = "Feels like: " + allData.feels_like + '&degC';
     document.getElementById('temp_min').innerHTML = "L: " + allData.temp_min + '&degC';
     document.getElementById('temp_max').innerHTML = "H: " + allData.temp_max + '&degC';
     document.getElementById('description').innerHTML = allData.description;

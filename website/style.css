@@ -1,111 +1,101 @@
-body{
-    background: #fffff8;
+body {
+    background: url("./view-foggy-mountain-landscape.jpg");
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-#app{
+#entry {
+    width: 50%;
+    background: white;
+    margin: 50px auto;
+    border-radius: 10px;
+    height: 208px;
+    opacity: 0;
+    transition: all 2s ease;
+}
+
+#entryHolder {
+    text-align: center;
+    align-items: center;
+    width: 100%;
+    height: 80%;
     display: grid;
-    grid-auto-rows: minmax(150px, auto);
-    /* grid-template-columns:  */
-    height:100vh;
-    background: #f23557;
-    color: #f0d43a;
-    justify-content: center;
-    grid-gap: 1em;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
-
-.holder{
-
-}
-
-.entry{
-    background: rgba(59, 74, 107, .4);
-}
-
-#entryHolder{
-
-}
-
-#date{
-
-}
-
-#temp{
-
-}
-
-#content{
-
+    grid-template-rows: 60%;
+    grid-template-columns: 50% 50%;
+    font-size: 1.5vw;
 }
 
 .headline {
-
+    color: #313032d8;
+    font-size: 32px;
+    font-weight: 300;
+    padding: 10px;
+    margin-top: 50px;
+    text-align: center;
 }
-.title{
 
+.title {
+    padding: 10px;
+    text-align: center;
+    font-size: 17px;
 }
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
-label{
-    display:block;
-    font-size: 27px;
-}
-
-input{
-    display:block;
-    height: 60px;
-    width: 320px;
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-    border: none;
-}
-
-button{
-    width: 400px;
-    height: 100px;
-    background: #3b4a6b;
-    color: #f0d43a;
-    font-size: 26px;
-    font-family: 'Oswald', sans-serif;
-    border: none;
-    box-shadow: 2px 4px 5px #444;
-}
-h1{
-    font-size: 36px;
-}
-
-textarea{
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
-/* Reset style for HTML element on active to have no border*/
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
+#zip,
+#feelings,
+#generate {
+    background: #17053866;
+    margin: 60px auto 0px;
+    width: 35%;
     outline: none;
+    border: none;
+    border-radius: 20px;
+    height: 40px;
+    text-align: center;
+    color: white;
+    display: block;
+    font-size: 15px;
+    resize: none;
 }
+
+#error {
+    background-color: #e91e1e;
+    color: white;
+    font-size: large;
+    width: 22%;
+    text-align: center;
+    margin: 0px auto 12px;
+    border-radius: 1px 0px 30px 30px;
+    display: block;
+}
+
+#feelings {
+    margin-top: 0;
+    text-align: center;
+}
+
+#generate {
+    width: 20%;
+    margin-top: 18px;
+    background: #010c47;
+    cursor: pointer;
+}
+
+#content {
+    grid-column: 1 / -1;
+}
+
+#temp,
+#city {
+    font-size: 4vw;
+}
+
 /* Style for Placeholder Text*/
-::placeholder { /* Firefox, Chrome, Opera */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
-
-} 
-  
-:-ms-input-placeholder { /* Internet Explorer 10-11 */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
-
-} 
-  
-::-ms-input-placeholder { /* Microsoft Edge */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
-
-} 
+#zip::placeholder,
+#feelings::placeholder {
+    color: white;
+    font-family: sans-serif;
+    line-height: 40px;
+}
