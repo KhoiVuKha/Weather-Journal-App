@@ -13,6 +13,10 @@ With this project I have done some following works:
 - Add more data to display in web app
 - Modify project style and add background image
 
+## Demo-Preview
+
+![image](https://user-images.githubusercontent.com/15206083/201893501-f654925e-a6d2-471a-924d-216d362649ee.png)
+
 ## Instructions
 This will require modifying the `server.js` file and the `website/app.js` file. You can see `index.html` for element references, and once you are finished with the project steps, you can use `style.css` to style your application to customized perfection.
 
