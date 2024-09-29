@@ -43,7 +43,7 @@ body {
 }
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
-#zip,
+#cityName,
 #generate {
     background: #17053866;
     margin: 60px auto 0px;
@@ -107,7 +107,7 @@ body {
 }
 
 /* Style for Placeholder Text*/
-#zip::placeholder,
+#cityName::placeholder,
 #feelings::placeholder {
     color: white;
     font-family: sans-serif;

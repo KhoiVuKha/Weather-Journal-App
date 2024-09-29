@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <meta charset="UTF-8">
-      <title>Weather Journal</title>
-      <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="style.css">
-   </head>
-   <body>
-      <div id = "app">
-         <div class="headline">
-            Weather Journal App
-         </div>
-         <div class="zip">
-            <input type="text" id="zip" placeholder="Enter zip code here">
-            <small id="error"></small>
-         </div>
-         <div class ="feel">
-            <textarea id="feelings" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
-            <button id="generate" type="submit"> Generate </button>
-         </div>
-         <div id="entry">
-            <div class="title">Most Recent Entry</div>
-            <div id="entryHolder">
-               <div id="temp"></div>
-               <div id="city"></div>
-               <div id="temp_min_max"></div>
-               <div id="date"></div>
-               <div id="description"></div>
-               <div id="feels_like"></div>
-               <div id="content"></div>
-            </div>
+
+<head>
+   <meta charset="UTF-8">
+   <title>Weather Journal</title>
+   <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+   <div id="app">
+      <div class="headline">
+         Weather Journal App
+      </div>
+      <div class="cityName">
+         <input type="text" id="cityName" placeholder="Enter city name code here">
+         <small id="error"></small>
+      </div>
+      <div class="feel">
+         <textarea id="feelings" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
+         <button id="generate" type="submit"> Generate </button>
+      </div>
+      <div id="entry">
+         <div class="title">Most Recent Entry</div>
+         <div id="entryHolder">
+            <div id="temp"></div>
+            <div id="city"></div>
+            <div id="temp_min_max"></div>
+            <div id="date"></div>
+            <div id="description"></div>
+            <div id="feels_like"></div>
+            <div id="content"></div>
          </div>
       </div>
-      <script src="app.js" type="text/javascript"></script>
-   </body>
+   </div>
+   <script src="app.js" type="text/javascript"></script>
+</body>
+
 </html>

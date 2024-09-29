@@ -1,17 +1,15 @@
 /**
  * Refer to: https://openweathermap.org/current
- * Built-in API request by ZIP code
- * Please note if country is not specified then the search works for USA as a default.
+ * Built-in API request by city name
  * API Call:
- * https://api.openweathermap.org/data/2.5/weather?zip={zip code},{country code}&appid={API key}
+ * http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric
  */
 
 /* Global Variables */
 // Personal API Key for OpenWeatherMap API
-const apiKey = 'bb7daac7665c00c87d1c8d42bd26d101&units=metric';
-
+const apiKey = '&appid=bb7daac7665c00c87d1c8d42bd26d101&units=metric';
 // Base URL
-let baseURL = 'https://api.openweathermap.org/data/2.5/weather?zip='
+const baseURL = 'http://api.openweathermap.org/data/2.5/weather?q=';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
@@ -24,15 +22,15 @@ document.getElementById('generate').addEventListener('click', performAction);
 function performAction(e) {
   console.log("generate button onClicked");
 
-  const zipCode =  document.getElementById('zip').value;
+  const cityName = document.getElementById('cityName').value;
   const feelings = document.getElementById('feelings').value;
 
   // Get weather data return promise
-  getWeatherData(baseURL, zipCode, apiKey).then((data) => {
+  getWeatherData(cityName).then((data) => {
     if (data) {
       // Process data received here
       const {
-        main: {temp, feels_like, temp_min, temp_max},
+        main: { temp, feels_like, temp_min, temp_max },
         name: city,
         weather: [{ description }],
       } = data;
@@ -56,21 +54,22 @@ function performAction(e) {
 }
 
 /* Function to GET Web API Data*/
-const getWeatherData = async (url, zip, key) => {
-  const res = await fetch(url + zip + `,&appid=${key}`);
+const getWeatherData = async (cityName) => {
+  const response = await fetch(baseURL + cityName + apiKey);
+
   try {
-    const data = await res.json();
+    const data = await response.json();
     console.log(data)
 
     if (data.cod != 200) {
       // Display the error message on UI
       error.innerHTML = data.message;
-      setTimeout(_=> error.innerHTML = '', 2000)
+      setTimeout(_ => error.innerHTML = '', 2000)
       throw `${data.message}`;
     }
 
     return data;
-  }  catch(error) {
+  } catch (error) {
     console.log("error", error);
   }
 }
@@ -78,10 +77,10 @@ const getWeatherData = async (url, zip, key) => {
 /* Function to POST data */
 const postData = async (url = "", data = {}) => {
   const response = await fetch(url, {
-    method: 'POST', 
-    credentials: 'same-origin', 
+    method: 'POST',
+    credentials: 'same-origin',
     headers: {
-        'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       temp: data.temp,
@@ -100,7 +99,7 @@ const postData = async (url = "", data = {}) => {
     console.log(`[Client] Data saved: `, newData);
     return newData;
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
 };
 
@@ -116,7 +115,7 @@ const updateUI = async () => {
     document.getElementById('feels_like').innerHTML = "Feels like: " + allData.feels_like + '&degC';
     document.getElementById('description').innerHTML = allData.description;
     document.getElementById('city').innerHTML = allData.city;
-  } catch(error) {
+  } catch (error) {
     console.log("error", error);
   }
 };
