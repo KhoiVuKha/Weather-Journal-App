@@ -4,104 +4,120 @@ const serverURL = 'http://localhost:8000/weather';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let date = d.toDateString();
+let date = d.toDateString();  // Get the current date as a string
 
 // Event listener to add function to existing HTML DOM element
 document.getElementById('generate').addEventListener('click', performAction);
 
 /* Function called by event listener */
 function performAction(e) {
-  console.log("Generate button clicked");
+    console.log("Generate button clicked");
 
-  const cityName = document.getElementById('cityName').value;
-  const feelings = document.getElementById('feelings').value;
+    // Get user input for city name and feelings
+    const cityName = document.getElementById('cityName').value;
+    const feelings = document.getElementById('feelings').value;
 
-  // Get weather data return promise
-  getWeatherData(cityName).then((data) => {
-    if (data) {
-      // Process data received from server
-      const {
-        main: { temp, feels_like, temp_min, temp_max },
-        weather: [{ description }],
-        name: city
-      } = data;
+    // Get weather data and handle it as a promise
+    getWeatherData(cityName).then((data) => {
+        if (data) {
+            // Process data received from the server
+            const {
+                main: { temp, feels_like, temp_min, temp_max },
+                weather: [{ description }],
+                name: city
+            } = data;
 
-      const info = {
-        date,
-        temp: Math.round(temp),
-        user_response: feelings,
-        feels_like: Math.round(feels_like),
-        temp_min: Math.round(temp_min),
-        temp_max: Math.round(temp_max),
-        description,
-        city,
-      };
+            // Prepare data to be sent to the server
+            const info = {
+                date,
+                temp: Math.round(temp),  // Round temperature values
+                user_response: feelings,
+                feels_like: Math.round(feels_like),
+                temp_min: Math.round(temp_min),
+                temp_max: Math.round(temp_max),
+                description,
+                city,
+            };
 
-      postData("/add", info);
-      updateUI();
-      document.getElementById('entry').style.opacity = 1;
-    }
-  });
+            // POST the weather information to the server
+            postData("/add", info);
+            updateUI();  // Update the UI with the new data
+            document.getElementById('entry').style.opacity = 1;  // Show entry section
+        }
+    });
 }
 
-/* Function to GET weather data from server-side */
+/* Function to GET weather data from the server-side */
 const getWeatherData = async (cityName) => {
-  const response = await fetch(`${serverURL}?city=${cityName}`);
+    // Fetch weather data
+    const response = await fetch(`${serverURL}?city=${cityName}`);
 
-  try {
-    const data = await response.json();
-    console.log("[Client] Received: ", data);
+    try {
+        // Parse JSON data
+        const data = await response.json();
+        console.log("[Client] Received: ", data);
 
-    if (data.cod && data.cod != 200) {
-      // Display error message on UI
-      document.getElementById('error').innerHTML = data.message;
-      setTimeout(() => document.getElementById('error').innerHTML = '', 2000);
-      throw `${data.message}`;
+        // Check for errors in the response
+        if (data.cod && data.cod != 200) {
+            // Display error message on UI
+            document.getElementById('error').innerHTML = data.message;
+
+            // Clear error after 2 seconds
+            setTimeout(() => document.getElementById('error').innerHTML = '', 2000);
+
+            // Throw an error to be caught
+            throw `${data.message}`;
+        }
+
+        return data;  // Return the parsed data
+    } catch (error) {
+        // Log any errors
+        console.log("Error fetching weather data", error);
     }
-
-    return data;
-  } catch (error) {
-    console.log("Error fetching weather data", error);
-  }
 };
 
 /* Function to POST data */
 const postData = async (url = "", data = {}) => {
-  const response = await fetch(url, {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data)
-  });
+    const response = await fetch(url, {
+        method: 'POST',  // Specify the request method
+        credentials: 'same-origin',  // Send cookies for same-origin requests
+        headers: {
+            'Content-Type': 'application/json',  // Specify the content type
+        },
+        body: JSON.stringify(data)  // Convert data to JSON string
+    });
 
-  try {
-    const newData = await response.json();
-    console.log(`[Client] Data saved: `, newData);
-    return newData;
-  } catch (error) {
-    console.log(error);
-  }
+    try {
+        // Parse the response JSON
+        const newData = await response.json();
+
+        // Log saved data
+        console.log(`[Client] Data saved: `, newData);
+        return newData;  // Return the new data
+    } catch (error) {
+        console.log(error);  // Log any errors
+    }
 };
-
 
 /* Function to update UI */
 const updateUI = async () => {
-  try {
-    const request = await fetch('/all');
-    const allData = await request.json();
+    try {
+        const request = await fetch('/all');  // Fetch all data from the server
+        const allData = await request.json();  // Parse JSON response
 
-    console.log(`[Client] allData: `, allData);
+        // Log all data
+        console.log(`[Client] allData: `, allData);
 
-    document.getElementById('date').innerHTML = allData.date;
-    document.getElementById('temp').innerHTML = allData.temp + '&degC';
-    document.getElementById('content').innerHTML = "You are feeling " + allData.user_response;
-    document.getElementById('temp_min_max').innerHTML = "L: " + allData.temp_min + '&degC' + " H: " + allData.temp_max + '&degC';
-    document.getElementById('feels_like').innerHTML = "Feels like: " + allData.feels_like + '&degC';
-    document.getElementById('description').innerHTML = allData.description;
-    document.getElementById('city').innerHTML = allData.city;
-  } catch (error) {
-    console.error("Error updating UI:", error);
-  }
+        // Update HTML elements with the received data
+        document.getElementById('date').innerHTML = allData.date;
+        document.getElementById('temp').innerHTML = allData.temp + '&degC';
+        document.getElementById('content').innerHTML = "You are feeling " + allData.user_response;
+        document.getElementById('temp_min_max').innerHTML = "L: " + allData.temp_min + '&degC' + " H: " + allData.temp_max + '&degC';
+        document.getElementById('feels_like').innerHTML = "Feels like: " + allData.feels_like + '&degC';
+        document.getElementById('description').innerHTML = allData.description;
+        document.getElementById('city').innerHTML = allData.city;
+    } catch (error) {
+        // Log any errors
+        console.error("Error updating UI:", error);
+    }
 }
