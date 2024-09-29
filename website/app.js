@@ -1,26 +1,17 @@
-/**
- * Refer to: https://openweathermap.org/current
- * Built-in API request by city name
- * API Call:
- * http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric
- */
-
 /* Global Variables */
-// Personal API Key for OpenWeatherMap API
-const apiKey = '&appid=bb7daac7665c00c87d1c8d42bd26d101&units=metric';
-// Base URL
-const baseURL = 'http://api.openweathermap.org/data/2.5/weather?q=';
+// Base URL of your server-side API endpoint
+const serverURL = 'http://localhost:8000/weather';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.toDateString();
+let date = d.toDateString();
 
 // Event listener to add function to existing HTML DOM element
 document.getElementById('generate').addEventListener('click', performAction);
 
 /* Function called by event listener */
 function performAction(e) {
-  console.log("generate button onClicked");
+  console.log("Generate button clicked");
 
   const cityName = document.getElementById('cityName').value;
   const feelings = document.getElementById('feelings').value;
@@ -28,17 +19,17 @@ function performAction(e) {
   // Get weather data return promise
   getWeatherData(cityName).then((data) => {
     if (data) {
-      // Process data received here
+      // Process data received from server
       const {
         main: { temp, feels_like, temp_min, temp_max },
-        name: city,
         weather: [{ description }],
+        name: city
       } = data;
 
       const info = {
-        newDate,
+        date,
         temp: Math.round(temp),
-        feelings,
+        user_response: feelings,
         feels_like: Math.round(feels_like),
         temp_min: Math.round(temp_min),
         temp_max: Math.round(temp_max),
@@ -53,26 +44,26 @@ function performAction(e) {
   });
 }
 
-/* Function to GET Web API Data*/
+/* Function to GET weather data from server-side */
 const getWeatherData = async (cityName) => {
-  const response = await fetch(baseURL + cityName + apiKey);
+  const response = await fetch(`${serverURL}?city=${cityName}`);
 
   try {
     const data = await response.json();
-    console.log(data)
+    console.log("[Client] Received: ", data);
 
-    if (data.cod != 200) {
-      // Display the error message on UI
-      error.innerHTML = data.message;
-      setTimeout(_ => error.innerHTML = '', 2000)
+    if (data.cod && data.cod != 200) {
+      // Display error message on UI
+      document.getElementById('error').innerHTML = data.message;
+      setTimeout(() => document.getElementById('error').innerHTML = '', 2000);
       throw `${data.message}`;
     }
 
     return data;
   } catch (error) {
-    console.log("error", error);
+    console.log("Error fetching weather data", error);
   }
-}
+};
 
 /* Function to POST data */
 const postData = async (url = "", data = {}) => {
@@ -82,16 +73,7 @@ const postData = async (url = "", data = {}) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      temp: data.temp,
-      date: data.newDate,
-      user_response: data.feelings,
-      feels_like: data.feels_like,
-      temp_min: data.temp_min,
-      temp_max: data.temp_max,
-      description: data.description,
-      city: data.city,
-    })
+    body: JSON.stringify(data)
   });
 
   try {
@@ -103,11 +85,15 @@ const postData = async (url = "", data = {}) => {
   }
 };
 
-/* Function to GET Project Data */
+
+/* Function to update UI */
 const updateUI = async () => {
-  const request = await fetch('/all');
   try {
+    const request = await fetch('/all');
     const allData = await request.json();
+
+    console.log(`[Client] allData: `, allData);
+
     document.getElementById('date').innerHTML = allData.date;
     document.getElementById('temp').innerHTML = allData.temp + '&degC';
     document.getElementById('content').innerHTML = "You are feeling " + allData.user_response;
@@ -116,6 +102,6 @@ const updateUI = async () => {
     document.getElementById('description').innerHTML = allData.description;
     document.getElementById('city').innerHTML = allData.city;
   } catch (error) {
-    console.log("error", error);
+    console.error("Error updating UI:", error);
   }
-};
+}

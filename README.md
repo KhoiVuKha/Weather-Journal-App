@@ -39,6 +39,12 @@ terminal command line: `npm install body-parser`.
 6. Install Cors: 
 terminal command line `npm install cors`.
 
+7. Install dotenv
+terminal command line `npm install dotenv`
+
+8. Install node-fetch
+terminal command line `npm install node-fetch`
+
 ## Using Weather-Journal App
 1. Running the server:
 terminal command line: `node server.js`.
