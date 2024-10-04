@@ -6,6 +6,41 @@ const serverURL = 'http://localhost:8000/weather';
 let d = new Date();
 let date = d.toDateString();  // Get the current date as a string
 
+document.getElementById('cityName').addEventListener('focus', function () {
+    if (this.value) {
+        // Select all text when the text field has content
+        this.select();
+    } else {
+        // Clear placeholder when empty and focused
+        this.placeholder = '';
+    }
+});
+
+document.getElementById('feelings').addEventListener('focus', function () {
+    if (this.value) {
+        // Select all text when the textarea has content
+        this.select();
+    } else {
+        // Clear placeholder when empty and focused
+        this.placeholder = '';
+    }
+});
+
+// Restore the placeholder when the field is empty and loses focus
+document.getElementById('cityName').addEventListener('blur', function () {
+    if (!this.value) {
+        // Restore the original placeholder when empty
+        this.placeholder = 'Enter city name here';
+    }
+});
+
+document.getElementById('feelings').addEventListener('blur', function () {
+    if (!this.value) {
+        // Restore the original placeholder when empty
+        this.placeholder = 'Enter your feelings here';
+    }
+});
+
 // Event listener to add function to existing HTML DOM element
 document.getElementById('generate').addEventListener('click', performAction);
 
@@ -59,13 +94,9 @@ const getWeatherData = async (cityName) => {
 
         // Check for errors in the response
         if (data.cod && data.cod != 200) {
-            // Display error message on UI
-            document.getElementById('error').innerHTML = data.message;
-
-            // Clear error after 2 seconds
-            setTimeout(() => document.getElementById('error').innerHTML = '', 2000);
-
-            // Throw an error to be caught
+            // Display the error message on UI
+            error.innerHTML = data.message;
+            setTimeout(_ => error.innerHTML = '', 2000)
             throw `${data.message}`;
         }
 
